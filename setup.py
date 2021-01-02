@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="my_utils",
+    name="myutils",
     version="0.0.1",
     author="Ricardo Pacheco",
     author_email="rjgpacheco@gmail.com",
