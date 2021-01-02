@@ -5,9 +5,18 @@ Some are just ways I like calling specific functions.
 """
 
 import re
-
+import numpy as np
 
 def chunks(lst, n):
+    """
+    Splits lst into n chunks.
+    
+    Taken from Jason Mitchell at https://stackoverflow.com/a/29679492.
+    """
+    return [list(x) for x in np.array_split(lst, n)]
+
+
+def chunks_n(lst, n):
     """
     Yield successive n-sized chunks from lst.
     
