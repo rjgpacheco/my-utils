@@ -5,7 +5,9 @@ Some are just ways I like calling specific functions.
 """
 
 import re
+import random
 import numpy as np
+
 
 def chunks(lst, n):
     """
@@ -14,6 +16,15 @@ def chunks(lst, n):
     Taken from Jason Mitchell at https://stackoverflow.com/a/29679492.
     """
     return [list(x) for x in np.array_split(lst, n)]
+
+
+def scramble(lst):
+    """
+    Scrambles a list.
+
+    Taken from koffein at https://stackoverflow.com/a/19836008.
+    """
+    return sorted(lst, key=lambda _: random.random())
 
 
 def chunks_n(lst, n):
