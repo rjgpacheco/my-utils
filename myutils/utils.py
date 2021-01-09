@@ -4,12 +4,15 @@ Collection of utilities I use often.
 Some are just ways I like calling specific functions.
 """
 
-import re
+import copy
 import random
+import re
+from typing import Union
+
 import numpy as np
 
 
-def chunks(lst, n):
+def chunks(lst: list, n: int) -> list:
     """
     Splits lst into n chunks.
     
@@ -18,7 +21,7 @@ def chunks(lst, n):
     return [list(x) for x in np.array_split(lst, n)]
 
 
-def scramble(lst):
+def scramble(lst: list) -> list:
     """
     Scrambles a list.
 
@@ -27,7 +30,7 @@ def scramble(lst):
     return sorted(lst, key=lambda _: random.random())
 
 
-def chunks_n(lst, n):
+def chunks_n(lst: list, n: int) -> list:
     """
     Yield successive n-sized chunks from lst.
     
@@ -67,3 +70,26 @@ def whole_word_replace(pattern: str, replacement: str, string: str) -> str:
     'It was a catastrofic day for my dog.'
     """
     return re.sub(whole_word_pattern(pattern), replacement, string)
+
+
+def delete_field(dictionary: dict, field, inplace=True) -> Union[dict, None]:
+    """
+    Recursive delete field in dictionary, .
+
+    Dictionary is modified in palce if inplace=True (default)
+    """
+
+    #  Safe copy
+    if not inplace:
+        dictionary = copy.deepcopy(dictionary)
+
+    for k, v in list(dictionary.items()):
+        if k == field:
+            del dictionary[k]
+
+        if isinstance(v, dict):
+            delete_field(v, field, inplace=True)
+
+    #  If not inplace, return
+    if not inplace:
+        return dictionary
