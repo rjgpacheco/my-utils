@@ -57,17 +57,19 @@ def check_dict_has_kv(dictionary: dict, key, value) -> bool:
     """
     Check if `dictionary` has entry `key` with value `value`.
     """
-    if key in dictionary.keys() and dictionary[key] == value:
+    if key in list(dictionary.keys()) and dictionary[key] == value:
         return True
     return False
 
-def check_dict_kv_in_list(dictionary: dict, key, values:Sequence) -> bool:
+
+def check_dict_kv_in_list(dictionary: dict, key, values: Sequence) -> bool:
     """
     Check if `dictionary` has entry `key` with value in `values`.
     """
-    if key in dictionary.keys() and dictionary[key] in values:
+    if key in list(dictionary.keys()) and dictionary[key] in values:
         return True
     return False
+
 
 def merge_dicts_kv(dictionaries: Sequence[dict]) -> dict:
     """
