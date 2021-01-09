@@ -74,12 +74,12 @@ def whole_word_replace(pattern: str, replacement: str, string: str) -> str:
 
 def delete_field(dictionary: dict, field, inplace=True) -> Union[dict, None]:
     """
-    Recursive delete field in dictionary, .
+    Recursive delete `field` in `dictionary`.
 
-    Dictionary is modified in palce if inplace=True (default)
+    Dictionary is modified in palce if `inplace=True` (default)
     """
 
-    #  Safe copy
+    # Safe copy
     if not inplace:
         dictionary = copy.deepcopy(dictionary)
 
@@ -90,6 +90,30 @@ def delete_field(dictionary: dict, field, inplace=True) -> Union[dict, None]:
         if isinstance(v, dict):
             delete_field(v, field, inplace=True)
 
-    #  If not inplace, return
+    # If not inplace, return
     if not inplace:
         return dictionary
+
+
+def filter_fields(dictionary: dict, fields: list, inplace=True) -> Union[dict, None]:
+    """
+    Deletes from `dictionary` all fields not in `fields`
+
+    Dictionary is modified in palce if `inplace=True` (default)
+    """
+
+    # Safe copy
+    if not inplace:
+        dictionary = copy.deepcopy(dictionary)
+
+    for k, v in list(dictionary.items()):
+        if k not in fields:
+            del dictionary[k]
+
+        if isinstance(v, dict):
+            filter_fields(v, fields, inplace=True)
+
+    # If not inplace, return
+    if not inplace:
+        return dictionary
+
