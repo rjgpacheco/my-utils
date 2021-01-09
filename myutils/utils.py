@@ -4,12 +4,29 @@ Collection of utilities I use often.
 Some are just ways I like calling specific functions.
 """
 
-import copy
 import random
 import re
-from typing import Union
+from typing import Sequence
 
 import numpy as np
+
+
+def is_iterable(val):
+    """
+    Checks if `val` is iterable.
+
+
+    This method calls `iter(val)`. If an exception is raised, it's not an iterable. 
+
+    This is the 'correct' way, to account for the mess types are in Python.
+
+    For details, see https://stackoverflow.com/a/1952655
+    """
+    try:
+        iter(val)
+    except TypeError:
+        return False
+    return True
 
 
 def chunks(lst: list, n: int) -> list:
@@ -40,12 +57,43 @@ def chunks_n(lst: list, n: int) -> list:
         yield lst[i : i + n]
 
 
-def flatten(list_of_lists: list) -> list:
+def flatten(list_of_lists: list, exclude: Sequence = (str)) -> list:
     """
     Flatten a list of lists.
-    
+
+    This will also flatten items that are list like, such as strings.
+
+    To exclude them, pass a list of types to `exclude`.
+
+    By default, strings are excluded.
+
     Taken from Alex Martelli at https://stackoverflow.com/a/952952.
     """
+    needs_flattening = lambda item: is_iterable(item) and not isinstance(item, exclude)
+
+    while any(map(needs_flattening, list_of_lists)):
+        list_of_lists = flatten_one_level(list_of_lists, exclude=exclude)
+
+    return list_of_lists
+
+
+def flatten_one_level(list_of_lists: list, exclude: Sequence = (str)) -> list:
+    """
+    Flatten a list of lists.
+
+    Will only flatten a single level, so entries in output can also be lists.
+
+    This will also flatten items that are list like, such as strings.
+
+    To exclude them, pass a list of types to `exclude`.
+
+    By default, strings are excluded.
+
+    Taken from Alex Martelli at https://stackoverflow.com/a/952952.
+    """
+    #  Wrap non sequences in list, so we don't have problems later.
+    need_wrap = lambda item: isinstance(item, exclude) or not is_iterable(item)
+    list_of_lists = [[item] if need_wrap(item) else item for item in list_of_lists]
     return [item for sublist in list_of_lists for item in sublist]
 
 
@@ -70,50 +118,3 @@ def whole_word_replace(pattern: str, replacement: str, string: str) -> str:
     'It was a catastrofic day for my dog.'
     """
     return re.sub(whole_word_pattern(pattern), replacement, string)
-
-
-def delete_field(dictionary: dict, field, inplace=True) -> Union[dict, None]:
-    """
-    Recursive delete `field` in `dictionary`.
-
-    Dictionary is modified in palce if `inplace=True` (default)
-    """
-
-    # Safe copy
-    if not inplace:
-        dictionary = copy.deepcopy(dictionary)
-
-    for k, v in list(dictionary.items()):
-        if k == field:
-            del dictionary[k]
-
-        if isinstance(v, dict):
-            delete_field(v, field, inplace=True)
-
-    # If not inplace, return
-    if not inplace:
-        return dictionary
-
-
-def filter_fields(dictionary: dict, fields: list, inplace=True) -> Union[dict, None]:
-    """
-    Deletes from `dictionary` all fields not in `fields`
-
-    Dictionary is modified in palce if `inplace=True` (default)
-    """
-
-    # Safe copy
-    if not inplace:
-        dictionary = copy.deepcopy(dictionary)
-
-    for k, v in list(dictionary.items()):
-        if k not in fields:
-            del dictionary[k]
-
-        if isinstance(v, dict):
-            filter_fields(v, fields, inplace=True)
-
-    # If not inplace, return
-    if not inplace:
-        return dictionary
-

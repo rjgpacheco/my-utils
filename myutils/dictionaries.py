@@ -2,6 +2,7 @@
 A collection of utility functions to work with dictionaries.
 """
 from copy import deepcopy
+from myutils.utils import flatten
 from typing import Union
 from typing import Sequence
 
@@ -92,6 +93,10 @@ def merge_dicts_kv(dictionaries: Sequence[dict]) -> dict:
                 dictionary[k] = []
 
             dictionary.get(k, []).append(v)
+
+    for k, v in dictionary.items():
+        dictionary[k] = flatten(v)
+
     return dictionary
 
 
@@ -109,9 +114,14 @@ def delete_subdicts(dictionary: dict, dicts: Sequence[dict], inplace=True) -> Un
         if not isinstance(v, dict):
             continue
 
+        v_exists = True
         for badkey, badvalues in to_exclude.items():
-            if badkey in list(v.keys()) and v[badkey] in badvalues:
+            if v_exists and badkey in list(v.keys()) and v[badkey] in badvalues:
                 del dictionary[k]
+                v_exists = False
+        
+        if v_exists:
+            delete_subdicts(v, dicts, inplace=True)
 
     #  If not inplace, return
     if not inplace:

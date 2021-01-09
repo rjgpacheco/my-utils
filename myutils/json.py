@@ -32,6 +32,6 @@ def ts_int64(val):
     return np.int(val)
 
 
-def to_json(dictionary, indent=4):
-    return json.dumps(dictionary, indent=indent, default=to_serializable, sort_keys=True,)
+def to_json(dictionary, indent=4, sort_keys=True, default=to_serializable):
+    return json.dumps(dictionary, indent=indent, default=default, sort_keys=sort_keys,)
 
