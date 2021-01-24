@@ -118,3 +118,16 @@ def whole_word_replace(pattern: str, replacement: str, string: str) -> str:
     'It was a catastrofic day for my dog.'
     """
     return re.sub(whole_word_pattern(pattern), replacement, string)
+
+
+def pretty_round(x, precision=0):
+    s = f"{x:.{precision}%}"
+
+    if precision == 0 and s == "0%":
+        return "<1%"
+
+    if s == "0." + "0" * precision + "%":
+        return "<0." + "0" * (precision - 1) + "1%"
+
+    return s
+    
