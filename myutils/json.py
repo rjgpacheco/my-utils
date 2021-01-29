@@ -6,18 +6,24 @@ method when calling `json.dumps`.
 
 This package is just so we can convert objects to JSON safely. 
 
-I read about this serialization feature in 
-https://ellisvalentiner.com/post/serializing-numpyfloat32-json/.
-
-Most of the code was take from there. 
-
-Credit goes to Ellis Michael Valentiner, the author of that post.
 """
 
 
 import json
 import numpy as np
 from functools import singledispatch
+
+
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
+# Make JSON work with pandas and numpy.
+#
+# I read about this serialization feature in
+# https://ellisvalentiner.com/post/serializing-numpyfloat32-json/.
+#
+# Most of the code was take from there.
+#
+# Credit goes to Ellis Michael Valentiner, the author of that post.
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 
 
 @singledispatch
@@ -32,6 +38,23 @@ def ts_int64(val):
     return np.int(val)
 
 
-def to_json(dictionary, indent=4, sort_keys=True, default=to_serializable):
-    return json.dumps(dictionary, indent=indent, default=default, sort_keys=sort_keys,)
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
+#  Other utility functions
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 
+
+def to_json(dictionary, indent=4, sort_keys=True, default=to_serializable, **kwargs):
+    """
+    Convert a dictionary to json.
+
+    By default, uses a serializer that lets it work with works with pandas and numpy.
+    """
+    return json.dumps(dictionary, indent=indent, default=default, sort_keys=sort_keys, **kwargs)
+
+
+def load_json_file(file):
+    """
+    Read json file and return contents as dictionary
+    """
+    with open(file, "r") as f:
+        return json.load(f)

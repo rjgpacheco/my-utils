@@ -19,7 +19,7 @@ def load_dataframe(filepath: str):
 def print_df(df, max_rows=None, max_cols=None, max_colwidth=None):
     """
     This is used in Jupyter notebooks or IPython consoles 
-    to print more of a dataframe.
+    to print more of a DataFrame.
     """
     with pd.option_context(
         "display.max_rows", max_rows,
@@ -31,6 +31,6 @@ def print_df(df, max_rows=None, max_cols=None, max_colwidth=None):
 
 def copy_dataframe_clipboard(df):
     """
-    Copy dataframe to clipboard in TSV format.
+    Copy DataFrame to clipboard in TSV format.
     """
     copy(df.to_csv(sep="\t", index=False))
