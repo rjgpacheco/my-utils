@@ -33,12 +33,19 @@ def sleep_until(target, silent=False):
 
 
 def time_range(start, stop, delta: timedelta, include_start=True, include_stop=True):
+    def gen_time_range(start, stop, delta, include_start, include_stop):
+        t = start if include_start else start + delta
+        while True:
+            if (include_stop and t > stop) or (not include_stop and t == stop):
+                return
+            yield t
+            t = t + delta
+
     start = parse_time(start)
     stop = parse_time(stop)
-    t = start if include_start else start + delta
-    while True:
-        if (include_stop and t > stop) or (not include_stop and t == stop):
-            return
-        yield t
-        t = t + delta
+
+    if start >= stop:
+        raise ValueError(f"'start' ({start=}) is after of equal to 'stop' ({stop=}) .")
+
+    return gen_time_range(start, stop, delta, include_start, include_stop)
 
