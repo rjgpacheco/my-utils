@@ -1,20 +1,6 @@
-import datetime
-import sys
-from datetime import datetime
-from io import StringIO
-from pathlib import Path
-
-import matplotlib
-import matplotlib.ticker as mtick
-import numpy as np
-import pandas as pd
-import pytz
-import seaborn as sns
 from matplotlib import pyplot as plt
-from matplotlib.ticker import FuncFormatter
 
 plt.style.use("fivethirtyeight")
-#  _ = plt.box(False)
 
 norm = lambda X: [x / sum(X) for x in X]
 
@@ -49,7 +35,7 @@ def trillions(x, pos):
 
 
 #  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Figure Manipulaton
+# Figure Manipulation
 #  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 def format_ax(ax):
     ax.spines["bottom"].set_color(COLOR_PLOT_FACECOLOR)
@@ -60,20 +46,57 @@ def format_ax(ax):
     return ax
 
 
-def figure_initialization_(dpi=DEFAULT_DPI, h=DEFAULT_HEIGHT, w=DEFAULT_WIDTH, **kwargs):
+def prep_plot(
+    title=None,
+    x_axis_formatter=None,
+    y_axis_formatter=None,
+    xlabel=None,
+    ylabel=None,
+    xscale=None,
+    yscale=None,
+):
+    fig, ax = figure_initialization_()
+
+    if title is not None:
+        ax.set_title(x_axis_formatter)
+
+    if x_axis_formatter is not None:
+        ax.xaxis.set_major_formatter(x_axis_formatter)
+
+    if y_axis_formatter is not None:
+        ax.yaxis.set_major_formatter(y_axis_formatter)
+
+    if xlabel is not None:
+        ax.set_xlabel(xlabel)
+
+    if ylabel is not None:
+        ax.set_ylabel(ylabel)
+
+    if xscale is not None:
+        ax.set_xscale(xscale)
+
+    if yscale is not None:
+        ax.set_yscale(yscale)
+
+    return fig, ax
+
+
+def figure_initialization_(
+    dpi=DEFAULT_DPI, h=DEFAULT_HEIGHT, w=DEFAULT_WIDTH, color=COLOR_PLOT_FACECOLOR, **kwargs
+):
     args = {
         "dpi": dpi,
         "figsize": (w, h),
-        "facecolor": COLOR_PLOT_FACECOLOR,
-        "edgecolor": COLOR_PLOT_FACECOLOR,
+        "facecolor": color,
+        "edgecolor": color,
         "frameon": True,
     }
 
     fig, ax = plt.subplots(**args, **kwargs)
-    ax.spines["bottom"].set_color(COLOR_PLOT_FACECOLOR)
-    ax.spines["top"].set_color(COLOR_PLOT_FACECOLOR)
-    ax.spines["right"].set_color(COLOR_PLOT_FACECOLOR)
-    ax.spines["left"].set_color(COLOR_PLOT_FACECOLOR)
+    ax.spines["bottom"].set_color(color)
+    ax.spines["top"].set_color(color)
+    ax.spines["right"].set_color(color)
+    ax.spines["left"].set_color(color)
 
     return fig, ax
 

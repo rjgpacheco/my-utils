@@ -1,6 +1,17 @@
 import numpy as np
 
+
 def base_metrics(outcome, label, weights=None):
+
+    if not isinstance(outcome, np.ndarray):
+        outcome = np.array(outcome)
+
+    if not isinstance(label, np.ndarray):
+        label = np.array(label)
+
+    if weights is not None and not isinstance(weights, np.ndarray):
+        weights = np.array(weights)
+
     if outcome.shape != label.shape:
         raise ValueError(f"{outcome.shape=} != {label.shape=}")
 
