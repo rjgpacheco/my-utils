@@ -12,13 +12,13 @@ def whole_word_pattern(string: str) -> str:
 
 def whole_word_replace(pattern: str, replacement: str, string: str) -> str:
     """
-    Replaces all occurences of 'pattern' with 'replacement' in 'string'.
+    Replaces all occurrences of 'pattern' with 'replacement' in 'string'.
 
-    Will only match whole word occurences of 'pattern'.
+    Will only match whole word occurrences of 'pattern'.
 
     Example:
-    >>> whole_word_replace('cat', 'dog', 'It was a catastrofic day for my cat.')
-    'It was a catastrofic day for my dog.'
+    >>> whole_word_replace('cat', 'dog', 'It was a catastrophic day for my cat.')
+    'It was a catastrophic day for my dog.'
     """
     return re.sub(whole_word_pattern(pattern), replacement, string)
 
