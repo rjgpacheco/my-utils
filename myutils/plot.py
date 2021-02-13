@@ -58,7 +58,7 @@ def prep_plot(
     fig, ax = figure_initialization_()
 
     if title is not None:
-        ax.set_title(x_axis_formatter)
+        ax.set_title(title)
 
     if x_axis_formatter is not None:
         ax.xaxis.set_major_formatter(x_axis_formatter)
