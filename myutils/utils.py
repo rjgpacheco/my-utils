@@ -5,6 +5,7 @@ Some are just ways I like calling specific functions.
 """
 
 import hashlib
+import os
 import random
 import re
 from typing import Sequence
@@ -110,13 +111,13 @@ def whole_word_pattern(string: str) -> str:
 
 def whole_word_replace(pattern: str, replacement: str, string: str) -> str:
     """
-    Replaces all occurences of 'pattern' with 'replacement' in 'string'.
+    Replaces all occurrences of 'pattern' with 'replacement' in 'string'.
 
-    Will only match whole word occurences of 'pattern'.
+    Will only match whole word occurrences of 'pattern'.
 
     Example:
-    >>> whole_word_replace('cat', 'dog', 'It was a catastrofic day for my cat.')
-    'It was a catastrofic day for my dog.'
+    >>> whole_word_replace('cat', 'dog', 'It was a catastrophic day for my cat.')
+    'It was a catastrophic day for my dog.'
     """
     return re.sub(whole_word_pattern(pattern), replacement, string)
 
@@ -152,4 +153,13 @@ def get_file_hash(file_path, hash_function=hashlib.md5, chunk_size=4096):
     """
     with open(file_path, "rb") as f:
         return get_bytes_hash(f, hash_function=hash_function, chunk_size=chunk_size)
+
+
+def cls():
+    """
+    Clear terminal.
+    
+    Taken from popcnt at https://stackoverflow.com/a/684344.
+    """
+    os.system("cls" if os.name == "nt" else "clear")
 
