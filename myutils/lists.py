@@ -1,6 +1,7 @@
 import random
 import re
 from typing import Sequence
+from math import inf
 
 import numpy as np
 
@@ -51,7 +52,7 @@ def chunks_n(lst: list, n: int) -> list:
         yield lst[i : i + n]
 
 
-def flatten(list_of_lists: list, exclude: Sequence = (str)) -> list:
+def flatten(list_of_lists: list, exclude: Sequence = (str), levels=inf) -> list:
     """
     Flatten a list of lists.
 
@@ -63,30 +64,16 @@ def flatten(list_of_lists: list, exclude: Sequence = (str)) -> list:
 
     Taken from Alex Martelli at https://stackoverflow.com/a/952952.
     """
-    needs_flattening = lambda item: is_iterable(item) and not isinstance(item, exclude)
 
-    while any(map(needs_flattening, list_of_lists)):
-        list_of_lists = flatten_one_level(list_of_lists, exclude=exclude)
+    need_wrap = lambda item: isinstance(item, exclude) or not is_iterable(item)
+    needs_flattening = lambda item: is_iterable(item) and not isinstance(item, exclude)
+    
+    level = 0
+    while any(map(needs_flattening, list_of_lists)) and level < levels:
+        list_of_lists = [[item] if need_wrap(item) else item for item in list_of_lists]
+        list_of_lists = [item for sublist in list_of_lists for item in sublist]
+        level += 1
 
     return list_of_lists
 
-
-def flatten_one_level(list_of_lists: list, exclude: Sequence = (str)) -> list:
-    """
-    Flatten a list of lists.
-
-    Will only flatten a single level, so entries in output can also be lists.
-
-    This will also flatten items that are list like, such as strings.
-
-    To exclude them, pass a list of types to `exclude`.
-
-    By default, strings are excluded.
-
-    Taken from Alex Martelli at https://stackoverflow.com/a/952952.
-    """
-    #  Wrap non sequences in list, so we don't have problems later.
-    need_wrap = lambda item: isinstance(item, exclude) or not is_iterable(item)
-    list_of_lists = [[item] if need_wrap(item) else item for item in list_of_lists]
-    return [item for sublist in list_of_lists for item in sublist]
 
