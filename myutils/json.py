@@ -27,9 +27,13 @@ from functools import singledispatch
 
 
 @singledispatch
-def to_serializable(val):
+def to_serializable(o):
     """Used by default."""
-    return str(val)
+
+    if hasattr(o, "json_serialize"):
+        return o.json_serialize()
+
+    return str(o)
 
 
 @to_serializable.register(np.int64)
