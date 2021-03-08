@@ -67,7 +67,7 @@ def flatten(list_of_lists: list, exclude: Sequence = (str), levels=inf) -> list:
 
     need_wrap = lambda item: isinstance(item, exclude) or not is_iterable(item)
     needs_flattening = lambda item: is_iterable(item) and not isinstance(item, exclude)
-    
+
     level = 0
     while any(map(needs_flattening, list_of_lists)) and level < levels:
         list_of_lists = [[item] if need_wrap(item) else item for item in list_of_lists]
@@ -75,5 +75,4 @@ def flatten(list_of_lists: list, exclude: Sequence = (str), levels=inf) -> list:
         level += 1
 
     return list_of_lists
-
 
